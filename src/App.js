@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { GoogleApiWrapper } from 'google-maps-react'
+//import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <main>
+        <div id="controler"></div>
+        <div id="map"></div>
+        </main>
     );
   }
 }
 
-export default App;
+const LoadingContainer  = (props) => (
+  <div className="LoadingContainer"></div>
+)
+
+
+
+
+
+
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyC0qTi1hkGFXLku0y-CYAhm1y8gpDByKv0',
+  LoadingContainer : LoadingContainer 
+})(App)

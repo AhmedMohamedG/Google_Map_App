@@ -1,5 +1,26 @@
+.{
+	box-sizing: border-box;
+}
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  height: 100vh;
 }
+
+#root {
+	height: 100%;
+}
+
+#root >  div:first-child{
+  width: 100vw;
+  height: 100vh;
+}
+main{
+	height: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+}
+
+
