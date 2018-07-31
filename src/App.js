@@ -9,12 +9,9 @@ class App extends Component {
   render() {
     return (
       <main>
-        <div id="controler"></div>
-        <div id="map">
         <Map 
         google={this.props.google} 
         />
-        </div>
         </main>
     );
   }
