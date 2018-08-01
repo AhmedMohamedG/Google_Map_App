@@ -6,22 +6,54 @@ import './map.css'
 
 class Map extends Component {
 
+  state = {
+    locations: [
+      {name: "Citadel of Qaitbay", location: {lat:31.2140, lng: 29.8856}},
+      {name: "Bibliotheca Alexandrina", location: {lat: 31.2089, lng:29.9092}},
+      {name: "Alexandria Aquarium", location: {lat: 31.2128, lng: 29.8850}},
+      {name: "Roman Auditorium", location: {lat: 31.195003, lng: 29.904903}},
+      {name: "Abou El Abbas El Morsy Mosque", location: {lat: 31.2057, lng: 29.8824}}
+    ],
+   markers:[],
+}
+
+
+
 
 
   componentDidMount(){
-  	this.createMap();
+  	this.initMap();
 }
 
-createMap(){
+initMap(){
 const {google} = this.props
 const maps = google.maps;
   var map = new maps.Map(document.getElementById("map"),{
-          center: {lat:  31.206656, lng:29.893934},
-          zoom: 13,
-          mapTypeId:"roadmap"
+          center: {lat:31.206656, lng:29.893934},
+          zoom: 15,
+          mapTypeId:"roadmap",
+          mapTypeControl: false
         });
+  this.addMarkers(map);
+
   return map
 }
+
+addMarkers(map){
+    const {google} = this.props
+    let bounds = new google.maps.LatLngBounds()
+	   this.state.locations.forEach((location) => {
+      const marker = new google.maps.Marker({
+        position: {lat: location.location.lat, lng: location.location.lng},
+        map: map,
+        title: location.name
+      })
+    bounds.extend(location.location);
+    this.setState({markers:[...this.state.markers,marker]})
+})
+        map.fitBounds(bounds);
+
+	}
 
 render(){
 return (
