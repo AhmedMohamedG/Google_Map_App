@@ -36,24 +36,43 @@ const maps = google.maps;
         });
   this.addMarkers(map);
 
-  return map
+ // return map
 }
+
+populateInfoWindow(marker, infowindow, map){
+	if (infowindow.marker !== marker) {
+          infowindow.setContent('');
+          infowindow.marker = marker;
+          infowindow.addListener('closeclick', function() {
+          	infowindow.marker = null;
+          });
+    }
+    infowindow.setContent('<div>' + marker.title + '</div><div><p>Lat Lng </p>' +marker.position+ '</div>');
+    infowindow.open(map, marker);
+
+  }
 
 addMarkers(map){
     const {google} = this.props
     let bounds = new google.maps.LatLngBounds()
-	   this.state.locations.forEach((location) => {
-      const marker = new google.maps.Marker({
-        position: {lat: location.location.lat, lng: location.location.lng},
-        map: map,
-        title: location.name
-      })
-    bounds.extend(location.location);
-    this.setState({markers:[...this.state.markers,marker]})
-})
-        map.fitBounds(bounds);
+    let Infowindow = new google.maps.InfoWindow();
+	this.state.locations.forEach((location) => {
+	    let marker = new google.maps.Marker({
+	    position: {lat: location.location.lat, lng: location.location.lng},
+	    map: map,
+	    title: location.name
+  		})
+	  	bounds.extend(location.location);
+	   	this.setState({markers:[...this.state.markers,marker]});
+		marker.addListener('click',()=>(
+		this.populateInfoWindow(marker, Infowindow,map)
+		));
+	})
+    map.fitBounds(bounds);
 
-	}
+ }
+
+
 
 render(){
 return (
