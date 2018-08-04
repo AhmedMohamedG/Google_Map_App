@@ -104,6 +104,9 @@ addMarkers(map,google){
   		})
 	  	bounds.extend(location.location);
 	   	this.setState({markers:[...this.state.markers,marker]});
+      this.state.markers.push(marker)
+              //            console.log(this.state.markers)
+
 		marker.addListener('click',()=>(
 		this.populateInfoWindow(marker, Infowindow,map,service,google)
 		));
@@ -115,9 +118,16 @@ addMarkers(map,google){
 
 
 render(){
+
 return (
 <div id="mapDiv">
-<div id="controler"></div>
+<div id="controler">
+ <ul className="locations-list">{
+              this.state.markers/*.filter(m => m.getVisible())*/.map((m, i) =>
+                (<li key={i}>{m.title}</li>))
+
+            }</ul>
+</div>
 <div id="map"></div>
 </div>
 	)
