@@ -58,11 +58,11 @@ populateInfoWindow(marker, infowindow, map,service,google){
       }, function(place, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
 			let infoContent =''
-		    if (place.name) {
+		    /*if (place.name) {
 		            infoContent += '<p>' + place.name + '</p>';
-		          }
+		          }*/
 		          if (place.formatted_address) {
-		            infoContent += '<p>' + place.formatted_address+'</p>'
+		            infoContent += '<p>Address</p><p>' + place.formatted_address+'</p>'
 		          }
 		          if (place.formatted_phone_number) {
 		            infoContent += '<p>' + place.formatted_phone_number+'</p>'
