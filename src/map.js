@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 //import ReactDOM from 'react-dom'
 import './map.css'
 
-
+//onClick={this.listclicked.bind(this)}
 
 class Map extends Component {
 
@@ -40,7 +40,22 @@ var map = new maps.Map(document.getElementById("map"),{
         });
   this.addMarkers(map,google);
 
+/*
+
+use ref to get map in listclicked func
+*/
  // return map
+
+
+ /**/
+ const listclicked = this.listclicked.bind(this);
+ const list = document.getElementById('locations-list');
+list.addEventListener("click",(e)=>(
+listclicked(e,map)
+  )
+
+  )
+
 }
 
 populateInfoWindow(marker, infowindow, map,service,google){
@@ -53,8 +68,9 @@ populateInfoWindow(marker, infowindow, map,service,google){
           	infowindow.marker = null;
           });
     }
-    infowindow.setContent('<div>' + marker.title + '</div><div><p>Lat Lng </p>' +marker.position+ '</div>');
+    infowindow.setContent('<div class="marke_taitle">' + marker.title + '</div><div><p>Lat Lng </p>' +marker.position+ '</div>');
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
+    if(results){
     service.getDetails({
         placeId: results[0].place_id
       }, function(place, status) {
@@ -88,15 +104,16 @@ populateInfoWindow(marker, infowindow, map,service,google){
           }*/
 		  	infowindow.setContent('<div>' + marker.title + '</div><div><p>Lat Lng </p>' +marker.position+ infoContent +'</div>');          
         }});
-        })
+        }})
        
     infowindow.open(map, marker);
 //console.log(marker)
+/*c*/
   }
 
 addMarkers(map,google){
     let bounds = new google.maps.LatLngBounds()
-    let Infowindow = this.props.Infowindow;
+    let infowindow = this.props.infowindow;
     let service = new google.maps.places.PlacesService(map);
 	this.state.locations.forEach((location) => {
 	    let marker = new google.maps.Marker({
@@ -110,7 +127,7 @@ addMarkers(map,google){
               //            console.log(this.state.markers)
 
 		marker.addListener('click',()=>(
-		this.populateInfoWindow(marker, Infowindow,map,service,google)
+		this.populateInfoWindow(marker, infowindow,map,service,google)
 		));
 	})
     map.fitBounds(bounds);
@@ -124,31 +141,30 @@ handleChange =(e) => {
 
 
 
-toggleMarks(e){
+toggleMarks(e,map){
 
-const {locations, markers} = this.state
-const infowindow = this.props.Infowindow
-const query = e.target.value;
-    if (query) {
-      locations.forEach((l, i) => {
-        if (l.name.toLowerCase().includes(query.toLowerCase())) {
-          markers[i].setVisible(true)
-        } else {
-          if (infowindow.marker === markers[i]) {
-            // close the info window if marker removed
-            infowindow.close()
-          }
-          markers[i].setVisible(false)
+  const {locations, markers} = this.state
+  const infowindow = this.props.Infowindow
+  const query = e.target.value.trim().toLowerCase();
+  if (query) {
+    locations.forEach((l, i) => {
+      if (l.name.toLowerCase().includes(query)) {
+        markers[i].setVisible(true)
+      } else {
+        if (infowindow.marker === markers[i]) {
+          infowindow.close()
         }
-      })
-    } else {
-      locations.forEach((l, i) => {
-        if (markers.length && markers[i]) {
-          markers[i].setVisible(true)
-        }
-      })
-    }
-    this.fillList();
+        markers[i].setVisible(false)
+      }
+    })
+  } else {
+    locations.forEach((l, i) => {
+      if (markers.length && markers[i]) {
+        markers[i].setVisible(true)
+      }
+    })
+  }
+  this.fillList();
 }
 
 fillList(){
@@ -158,9 +174,30 @@ const locationList = document.getElementById("locations-list");
   }
   this.state.markers.filter(m => m.getVisible()).forEach((m, i) =>
   {document.getElementById("locations-list").innerHTML+=
-  '<li key={i}>'+m.title+'</li>'})
+  '<li key={i} >'+m.title+'</li>'})
 }
 
+listclicked(e,map){
+
+if(e.target && e.target.nodeName === "LI"){
+  const infowindow = this.props.infowindow;
+  const google = this.props.google;
+  const service = new google.maps.places.PlacesService(map);
+  const clickedMarker = this.state.markers.find( (m) => {
+     if( m.title.toLowerCase()===e.target.innerText.toLowerCase()){
+            return  m
+
+     }
+
+    }
+    )
+     this.populateInfoWindow(clickedMarker, infowindow, map,service,google)
+
+
+}
+
+
+}                   
 
 render(){
 
@@ -173,19 +210,16 @@ return (
                    value={this.state.value}
                    onChange={this.handleChange}/>
     <output name="result">
-      <ul id="locations-list">
+      <ul id="locations-list" >
       </ul>
     </output>
   </form>
 </div>
-<div id="map"></div>
+<div id="map" ref="map"></div>
 </div>
 	)
 
 }
-
-
-
 
 
 
