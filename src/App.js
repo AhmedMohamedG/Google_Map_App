@@ -6,11 +6,14 @@ import Map from './map.js'
 
 
 class App extends Component {
+
   render() {
+    let Infowindow = new this.props.google.maps.InfoWindow();
     return (
       <main>
         <Map 
-        google={this.props.google} 
+        google={this.props.google}
+        Infowindow={Infowindow}  
         />
         </main>
     );

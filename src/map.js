@@ -15,7 +15,8 @@ class Map extends Component {
       {name: "Abou El Abbas El Morsy Mosque", location: {lat: 31.2057, lng: 29.8824}}
     ],
    markers:[],
-   places: []
+   places: [],
+   query:'',
 
 }
 
@@ -25,6 +26,7 @@ class Map extends Component {
 
   componentDidMount(){
   	this.initMap();
+    this.fillList();
 }
 
 initMap(){
@@ -94,7 +96,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
 
 addMarkers(map,google){
     let bounds = new google.maps.LatLngBounds()
-    let Infowindow = new google.maps.InfoWindow();
+    let Infowindow = this.props.Infowindow;
     let service = new google.maps.places.PlacesService(map);
 	this.state.locations.forEach((location) => {
 	    let marker = new google.maps.Marker({
@@ -114,19 +116,67 @@ addMarkers(map,google){
     map.fitBounds(bounds);
 
  }
+handleChange =(e) => {
+      this.toggleMarks(e);
+      this.setState({query: e.target.value});
 
+}
+
+
+
+toggleMarks(e){
+
+const {locations, markers} = this.state
+const infowindow = this.props.Infowindow
+const query = e.target.value;
+    if (query) {
+      locations.forEach((l, i) => {
+        if (l.name.toLowerCase().includes(query.toLowerCase())) {
+          markers[i].setVisible(true)
+        } else {
+          if (infowindow.marker === markers[i]) {
+            // close the info window if marker removed
+            infowindow.close()
+          }
+          markers[i].setVisible(false)
+        }
+      })
+    } else {
+      locations.forEach((l, i) => {
+        if (markers.length && markers[i]) {
+          markers[i].setVisible(true)
+        }
+      })
+    }
+    this.fillList();
+}
+
+fillList(){
+const locationList = document.getElementById("locations-list"); 
+  if(locationList.hasChildNodes()){
+    locationList.innerHTML = "";
+  }
+  this.state.markers.filter(m => m.getVisible()).forEach((m, i) =>
+  {document.getElementById("locations-list").innerHTML+=
+  '<li key={i}>'+m.title+'</li>'})
+}
 
 
 render(){
 
+
 return (
 <div id="mapDiv">
 <div id="controler">
- <ul className="locations-list">{
-              this.state.markers/*.filter(m => m.getVisible())*/.map((m, i) =>
-                (<li key={i}>{m.title}</li>))
-
-            }</ul>
+  <form>
+    <input role="search" type='text'
+                   value={this.state.value}
+                   onChange={this.handleChange}/>
+    <output name="result">
+      <ul id="locations-list">
+      </ul>
+    </output>
+  </form>
 </div>
 <div id="map"></div>
 </div>
