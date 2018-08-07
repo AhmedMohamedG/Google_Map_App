@@ -112,6 +112,8 @@ populateInfoWindow(marker, infowindow, map,service,google){
   }
 
 addMarkers(map,google){
+    let defaultIcon = this.makeMarkerIcon('3352FF');
+    let highlightedIcon = this.makeMarkerIcon('FF1C1C');
     let bounds = new google.maps.LatLngBounds()
     let infowindow = this.props.infowindow;
     let service = new google.maps.places.PlacesService(map);
@@ -119,7 +121,9 @@ addMarkers(map,google){
 	    let marker = new google.maps.Marker({
 	    position: {lat: location.location.lat, lng: location.location.lng},
 	    map: map,
-	    title: location.name
+	    title: location.name,
+      animation: google.maps.Animation.DROP,
+       icon: defaultIcon,
   		})
 	  	bounds.extend(location.location);
 	   	this.setState({markers:[...this.state.markers,marker]});
@@ -129,6 +133,10 @@ addMarkers(map,google){
 		marker.addListener('click',()=>(
 		this.populateInfoWindow(marker, infowindow,map,service,google)
 		));
+    marker.addListener('mouseover',function(){this.setIcon(highlightedIcon)});
+    marker.addListener('mouseout',function(){this.setIcon(defaultIcon)});
+
+
 	})
     map.fitBounds(bounds);
 
@@ -144,7 +152,7 @@ handleChange =(e) => {
 toggleMarks(e,map){
 
   const {locations, markers} = this.state
-  const infowindow = this.props.Infowindow
+  const infowindow = this.props.infowindow
   const query = e.target.value.trim().toLowerCase();
   if (query) {
     locations.forEach((l, i) => {
@@ -197,7 +205,41 @@ if(e.target && e.target.nodeName === "LI"){
 }
 
 
-}                   
+}
+
+
+
+
+ makeMarkerIcon(color){
+/*const google = this.props.google;
+
+       const image = new this.props.google.maps.MarkerImage(
+          'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'
+          + color +
+          '|40|_|%E2%80%A2',
+          new google.maps.Size(21,34), 
+          new google.maps.Point(0,0),
+           new google.maps.Point(10,34),
+          new google.maps.Size(21,34));*/
+const google = this.props.google;
+const image = {
+  url: 'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'
+      + color +
+      '|40|_|%E2%80%A2',
+  size: new google.maps.Size(71, 71),
+  origin: new google.maps.Point(0, 0),
+  anchor: new google.maps.Point(17, 34),
+  scaledSize: new google.maps.Size(25, 25)
+};
+
+
+        return image;          
+      };
+
+
+
+
+
 
 render(){
 
