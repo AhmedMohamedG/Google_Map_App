@@ -8,7 +8,9 @@ import Map from './map.js'
 class App extends Component {
 
   render() {
-    let infowindow = new this.props.google.maps.InfoWindow();
+    let infowindow = new this.props.google.maps.InfoWindow({
+        maxWidth: 200
+    });
     return (
       <main>
         <Map 

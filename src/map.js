@@ -5,16 +5,26 @@ class Map extends Component {
 
   state = {
     locations: [
-      {name: "Citadel of Qaitbay", location: {lat:31.2140, lng: 29.8856}},
-      {name: "Bibliotheca Alexandrina", location: {lat: 31.2089, lng:29.9092}},
-      {name: "Alexandria Aquarium", location: {lat: 31.2128, lng: 29.8850}},
-      {name: "Roman Auditorium", location: {lat: 31.195003, lng: 29.904903}},
-      {name: "Abou El Abbas El Morsy Mosque", location: {lat: 31.2057, lng: 29.8824}}
+      {name: "Citadel of Qaitbay",
+       location: {lat:31.2140, lng: 29.8856},
+      wikiTitle:'Citadel_of_Qaitbay'},
+      {name: "Bibliotheca Alexandrina",
+       location: {lat: 31.2089, lng:29.9092},
+     wikiTitle:'Library_of_Alexandria'},
+      {name: "Alexandria_Aquarium", 
+      location: {lat: 31.2128, lng: 29.8850},
+    wikiTitle:'Alexandria_Aquarium'},
+      {name: "Roman Auditorium", 
+      location: {lat: 31.195003, lng: 29.904903},
+    wikiTitle:'Roman_theatre_(structure)'},
+      {name: "Abu al-Abbas al-Mursi Mosque",
+       location: {lat: 31.2057, lng: 29.8824},
+     wikiTitle:'Abu_al-Abbas_al-Mursi_Mosque'}
     ],
    markers:[],
    places: [],
    query:'',
-
+   wiki:''
 }
 
   componentDidMount(){
@@ -414,18 +424,33 @@ initMap(){
 
 }
 
+//Fetching Data from Wikipedia API and populate it into the Infowwindo
+wiki(title){
+const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=extracts&rvprop=content&format=json&formatversion=2&origin=*`;
+ fetch(url)
+  .then(data =>   data.json())
+  .then(function (data){
+    document.getElementById('wiki').innerHTML = data.query.pages[0].extract
+  })
+  .catch(err => console.log(err)); 
+}
+
+
 //Create and fill infowWindos
 populateInfoWindow(marker, infowindow, map,service,google){
-	const geocoder = new google.maps.Geocoder();
+
+	    const geocoder = new google.maps.Geocoder();
 	
 	if (infowindow.marker !== marker) {
           infowindow.setContent('');
           infowindow.marker = marker;
           infowindow.addListener('closeclick', function() {
           	infowindow.marker = null;
+
           });
     }
-    infowindow.setContent('<div class="marke_taitle">' + marker.title + '</div><div><p>Lat Lng </p>' +marker.position+ '</div>');
+    infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div><h3>Location </h3>' +marker.position+ '</div>'
+      +`<h3> WIKI!</h3> <div id="wiki"></div></div>`);
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
     service.getDetails({
@@ -434,22 +459,26 @@ populateInfoWindow(marker, infowindow, map,service,google){
         if (status === google.maps.places.PlacesServiceStatus.OK) {
 			let infoContent =''		    
 		          if (place.formatted_address) {
-		            infoContent += '<p>Address</p><p>' + place.formatted_address+'</p>'
+		            infoContent += '<p class="title">Address</p><p>' + place.formatted_address+'</p>'
 		          }
 		          if (place.formatted_phone_number) {
 		            infoContent += '<p>' + place.formatted_phone_number+'</p>'
 		          }
 		        
-		  	infowindow.setContent('<div>' + marker.title + '</div><div><p>Lat Lng </p>' +infoContent+ '<p>Lat Lng </p>' +marker.position+'</div>');          
+		  	infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div>' +infoContent+ '<p class="title">Location</p>' +marker.position+'</div>'
+          +`<h3> WIKI!</h3> <div id="wiki"></div></div>`);          
         }});
         }})
        
     infowindow.open(map, marker);
+  const wiki = this.wiki.bind(this)
+  this.wiki(marker.wikiTitle)
+
   }
 
 //creating markers and adding event listeners to it
 addMarkers(map,google){
-  const defaultIcon = this.makeMarkerIcon('596360'),
+  const defaultIcon = this.makeMarkerIcon('fff'),
         highlightedIcon = this.makeMarkerIcon('FF1C1C'),
         bounds = new google.maps.LatLngBounds(),
         infowindow = this.props.infowindow,
@@ -462,6 +491,8 @@ addMarkers(map,google){
         animation: google.maps.Animation.DROP,
         icon: defaultIcon,
   		})
+          marker.wikiTitle = location.wikiTitle
+
 	  	bounds.extend(location.location);
 	   	this.setState({markers:[...this.state.markers,marker]});
       this.state.markers.push(marker)
@@ -471,7 +502,6 @@ addMarkers(map,google){
 		));
     marker.addListener('mouseover',function(){this.setIcon(highlightedIcon)});
     marker.addListener('mouseout',function(){this.setIcon(defaultIcon)});
-
 	})
   map.fitBounds(bounds);
 
@@ -548,7 +578,7 @@ listclicked(e,map){
     size: new google.maps.Size(71, 71),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(17, 34),
-    scaledSize: new google.maps.Size(25, 25)
+    scaledSize: new google.maps.Size(25, 25),
   };
 
   return image;          
