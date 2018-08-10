@@ -425,14 +425,18 @@ initMap(){
 }
 
 //Fetching Data from Wikipedia API and populate it into the Infowwindo
-wiki(title){
-const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=extracts&rvprop=content&format=json&formatversion=2&origin=*`;
- fetch(url)
-  .then(data =>   data.json())
-  .then(function (data){
-    document.getElementById('wiki').innerHTML = data.query.pages[0].extract
-  })
-  .catch(err => console.log(err)); 
+wiki(title, elClass = "wiki"){
+  const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=extracts&rvprop=content&format=json&formatversion=2&origin=*`;
+  fetch(url)
+    .then(data =>   data.json())
+    .then(function (data){
+      const wikiNodes = document.getElementsByClassName(elClass);
+      //iterate over HTMLCollection javascript https://stackoverflow.com/questions/22754315/for-loop-for-htmlcollection-elements
+      [].forEach.call(wikiNodes, function(wikiNode) {
+        wikiNode.innerHTML = data.query.pages[0].extract
+      });
+    })
+    .catch(err => console.log(err)); 
 }
 
 
@@ -450,7 +454,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
           });
     }
     infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div><h3>Location </h3>' +marker.position+ '</div>'
-      +`<h3> WIKI!</h3> <div id="wiki"></div></div>`);
+      +`<h3> WIKI!</h3> <div class="wiki"></div></div>`);
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
     service.getDetails({
@@ -466,13 +470,13 @@ populateInfoWindow(marker, infowindow, map,service,google){
 		          }
 		        
 		  	infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div>' +infoContent+ '<p class="title">Location</p>' +marker.position+'</div>'
-          +`<h3> WIKI!</h3> <div id="wiki"></div></div>`);          
+          +`<h3 class="title"> WIKI!</h3> <div class="wiki"></div></div>`);          
         }});
         }})
        
     infowindow.open(map, marker);
   const wiki = this.wiki.bind(this)
-  this.wiki(marker.wikiTitle)
+  wiki(marker.wikiTitle)
 
   }
 
