@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import './map.css'
+
 class Map extends Component {
 
   state = {
@@ -10,7 +11,7 @@ class Map extends Component {
       {name: "Bibliotheca Alexandrina",
        location: {lat: 31.2089, lng:29.9092},
      wikiTitle:'Library_of_Alexandria'},
-      {name: "Alexandria_Aquarium", 
+      {name: "Alexandria Aquarium", 
       location: {lat: 31.2128, lng: 29.8850},
     wikiTitle:'Alexandria_Aquarium'},
       {name: "Roman Auditorium", 
@@ -85,7 +86,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
 
           });
     }
-    infowindow.setContent(`<div id='infoWrapper' tabindex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
+    infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
       <h3> WIKI!</h3> <div class="wiki"></div></div>`);
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
@@ -101,7 +102,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
 		            infoContent += '<p>' + place.formatted_phone_number+'</p>'
 		          }
 		        
-		  	infowindow.setContent(`<div id='infoWrapper' tabindex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div>${infoContent}<p class="title">Location</p>${marker.position}</div>
+		  	infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div>${infoContent}<p class="title">Location</p>${marker.position}</div>
         <h3 class="title"> WIKI!</h3> <div class="wiki"></div></div>`);          
         }});
         }})
@@ -228,10 +229,10 @@ return (
 <div id="controler">
   <h1>Alexandria!</h1>
   <form>
-    <label for="places">
+    <label htmlFor="places">
       <h2>Search for a place</h2>
       <input  role="search" name="places" id="places" type='text' 
-      placeholder="Serach for a place"
+      placeholder="Enter a place"
                    value={this.state.value}
                    onChange={this.handleChange}/>
     </label>
@@ -242,7 +243,7 @@ return (
     </output>
   </form>
 </div>
-<div id="map" ref="map" role="application" tabindex="0"></div>
+<div id="map" ref="map" role="application" tabIndex="0"></div>
 </div>
 	)
 
