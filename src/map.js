@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import './map.css'
-
 class Map extends Component {
 
   state = {
@@ -34,376 +33,9 @@ class Map extends Component {
 
 initMap(){
 
-  const {google} = this.props
-  const maps = google.maps;
-
-  //https://snazzymaps.com/style/72543/assassins-creed-iv
-  const styles =[
-      {
-          "featureType": "all",
-          "elementType": "all",
-          "stylers": [
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "all",
-          "elementType": "labels",
-          "stylers": [
-              {
-                  "visibility": "off"
-              },
-              {
-                  "saturation": "-100"
-              }
-          ]
-      },
-      {
-          "featureType": "all",
-          "elementType": "labels.text.fill",
-          "stylers": [
-              {
-                  "saturation": 36
-              },
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 40
-              },
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "all",
-          "elementType": "labels.text.stroke",
-          "stylers": [
-              {
-                  "visibility": "off"
-              },
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 16
-              }
-          ]
-      },
-      {
-          "featureType": "all",
-          "elementType": "labels.icon",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "administrative",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 20
-              }
-          ]
-      },
-      {
-          "featureType": "administrative",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 17
-              },
-              {
-                  "weight": 1.2
-              }
-          ]
-      },
-      {
-          "featureType": "landscape",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 20
-              }
-          ]
-      },
-      {
-          "featureType": "landscape",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#4d6059"
-              }
-          ]
-      },
-      {
-          "featureType": "landscape",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#4d6059"
-              }
-          ]
-      },
-      {
-          "featureType": "landscape.natural",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#4d6059"
-              }
-          ]
-      },
-      {
-          "featureType": "poi",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "lightness": 21
-              }
-          ]
-      },
-      {
-          "featureType": "poi",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#4d6059"
-              }
-          ]
-      },
-      {
-          "featureType": "poi",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#4d6059"
-              }
-          ]
-      },
-      {
-          "featureType": "road",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "visibility": "on"
-              },
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "road",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "road.highway",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              },
-              {
-                  "lightness": 17
-              }
-          ]
-      },
-      {
-          "featureType": "road.highway",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              },
-              {
-                  "lightness": 29
-              },
-              {
-                  "weight": 0.2
-              }
-          ]
-      },
-      {
-          "featureType": "road.arterial",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 18
-              }
-          ]
-      },
-      {
-          "featureType": "road.arterial",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "road.arterial",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "road.local",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 16
-              }
-          ]
-      },
-      {
-          "featureType": "road.local",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "road.local",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#7f8d89"
-              }
-          ]
-      },
-      {
-          "featureType": "transit",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "color": "#000000"
-              },
-              {
-                  "lightness": 19
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "all",
-          "stylers": [
-              {
-                  "color": "#2b3638"
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "color": "#2b3638"
-              },
-              {
-                  "lightness": 17
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "geometry.fill",
-          "stylers": [
-              {
-                  "color": "#24282b"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "geometry.stroke",
-          "stylers": [
-              {
-                  "color": "#24282b"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels.text",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels.text.fill",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels.text.stroke",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels.icon",
-          "stylers": [
-              {
-                  "visibility": "off"
-              }
-          ]
-      }
-  ]
-
+  const {google} = this.props,
+        maps = google.maps,
+        styles =  require('./snazzy.js').default.styles;
   var map = new maps.Map(document.getElementById("map"),{
             center: {lat:31.206656, lng:29.893934},
             zoom: 15,
@@ -453,8 +85,8 @@ populateInfoWindow(marker, infowindow, map,service,google){
 
           });
     }
-    infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div><h3>Location </h3>' +marker.position+ '</div>'
-      +`<h3> WIKI!</h3> <div class="wiki"></div></div>`);
+    infowindow.setContent(`<div id='infoWrapper' tabindex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
+      <h3> WIKI!</h3> <div class="wiki"></div></div>`);
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
     service.getDetails({
@@ -469,8 +101,8 @@ populateInfoWindow(marker, infowindow, map,service,google){
 		            infoContent += '<p>' + place.formatted_phone_number+'</p>'
 		          }
 		        
-		  	infowindow.setContent('<div id=\'infoWrapper\'><div class="marker_taitle title"><h2>' + marker.title + '</h2></div><div>' +infoContent+ '<p class="title">Location</p>' +marker.position+'</div>'
-          +`<h3 class="title"> WIKI!</h3> <div class="wiki"></div></div>`);          
+		  	infowindow.setContent(`<div id='infoWrapper' tabindex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div>${infoContent}<p class="title">Location</p>${marker.position}</div>
+        <h3 class="title"> WIKI!</h3> <div class="wiki"></div></div>`);          
         }});
         }})
        
@@ -552,7 +184,7 @@ const locationList = document.getElementById("locations-list");
   }
   this.state.markers.filter(m => m.getVisible()).forEach((m, i) =>
   {document.getElementById("locations-list").innerHTML+=
-  '<li key={i} >'+m.title+'</li>'})
+  `<li key={i} tabindex='0'>${m.title}</li>`})
 }
 
 //Show infowwindow on mark when the list items clicked
@@ -594,17 +226,23 @@ render(){
 return (
 <div id="mapDiv">
 <div id="controler">
+  <h1>Alexandria!</h1>
   <form>
-    <input role="search" type='text' placeholder="Serach for a place"
+    <label for="places">
+      <h2>Search for a place</h2>
+      <input  role="search" name="places" id="places" type='text' 
+      placeholder="Serach for a place"
                    value={this.state.value}
                    onChange={this.handleChange}/>
-    <output name="result">
-      <ul id="locations-list" >
+    </label>
+    <output id="results">
+      <h3 id="resultsTitle">List of places</h3>
+      <ul aria-labelledby="resultsTitle" id="locations-list" >
       </ul>
     </output>
   </form>
 </div>
-<div id="map" ref="map"></div>
+<div id="map" ref="map" role="application" tabindex="0"></div>
 </div>
 	)
 
