@@ -30,11 +30,15 @@ class Map extends Component {
   componentDidMount(){
   	this.initMap();
     this.fillList();
+
 }
 
 initMap(){
 
-  const {google} = this.props,
+
+  return new Promise((resolve, reject) => {
+    if(this.props&&this.props.google){
+    const {google} = this.props,
         maps = google.maps,
         styles =  require('./snazzy.js').default.styles;
   var map = new maps.Map(document.getElementById("map"),{
@@ -52,9 +56,23 @@ initMap(){
   list.addEventListener("click",(e)=>(
   listclicked(e,map)
     )
+    )
+  }else{
+    alert('Error on Loading')
+  }})
+  .catch(function(err){
+
+    alert(err + "Error")
+    return (<h1>"error"</h1>)
+  }
 
     )
 
+
+
+
+
+  
 }
 
 //Fetching Data from Wikipedia API and populate it into the Infowwindo
@@ -68,22 +86,32 @@ wiki(title, elClass = "wiki"){
       [].forEach.call(wikiNodes, function(wikiNode) {
         wikiNode.innerHTML = data.query.pages[0].extract
       });
+      return true
     })
-    .catch(err => console.log(err)); 
+    .catch(function(err){
+      alert('Error on Loadin Wikipedia data')
+      return false}); 
+
+
+    
 }
 
 
 //Create and fill infowWindos
 populateInfoWindow(marker, infowindow, map,service,google){
 
+    const defaultIcon = this.makeMarkerIcon('fff'),
+        highlightedIcon = this.makeMarkerIcon('FF1C1C');
+         this.state.markers.forEach(function(marker){
+          marker.setIcon(defaultIcon)})
+        marker.setIcon(highlightedIcon)
+
 	    const geocoder = new google.maps.Geocoder();
-	
 	if (infowindow.marker !== marker) {
           infowindow.setContent('');
           infowindow.marker = marker;
           infowindow.addListener('closeclick', function() {
-          	infowindow.marker = null;
-
+            infowindow.marker = null;
           });
     }
     infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
@@ -109,7 +137,11 @@ populateInfoWindow(marker, infowindow, map,service,google){
        
     infowindow.open(map, marker);
   const wiki = this.wiki.bind(this)
-  wiki(marker.wikiTitle)
+  const isWiki = wiki(marker.wikiTitle);
+
+  if(!(isWiki)){
+document.getElementById('infoWrapper').innerHTML += " Error on loading Wiki"
+  }
 
   }
 
@@ -201,6 +233,13 @@ listclicked(e,map){
       }
     })
     this.populateInfoWindow(clickedMarker, infowindow, map,service,google)
+     const defaultIcon = this.makeMarkerIcon('fff'),
+        highlightedIcon = this.makeMarkerIcon('FF1C1C');
+         this.state.markers.forEach(function(marker){
+          marker.setIcon(defaultIcon)})
+        clickedMarker.setIcon(highlightedIcon)
+
+
   }
 }
 
@@ -223,6 +262,9 @@ listclicked(e,map){
 
 
 render(){
+
+ console.log(this.props)
+
 
 return (
 <div id="mapDiv">
