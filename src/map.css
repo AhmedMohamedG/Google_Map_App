@@ -31,7 +31,12 @@ body {
   background-color: gray;
   border-right:1px solid black;
 }
-
+#controler .wiki{
+	display: none;
+}
+#infoWrapper .wiki ,#wikiTitle {
+	display: block;
+}
 #controler h2, #controler h3 {
 	padding: 10px 0;
 	font-size: 1.5em;
@@ -118,9 +123,14 @@ h1{
   	height: auto;
   	min-height:100vh;
 }
-
+#controler .wiki{
+	display: block;
+}
+#infoWrapper .wiki ,.wikiTitle {
+	display: none;
+}
 #map {
-	height: 100vh;
+	height: 150vh;
 }
 
 }

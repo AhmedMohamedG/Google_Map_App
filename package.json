@@ -2,6 +2,7 @@
   "name": "map-app",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "https://ahmedmohamedg.github.io/Google_Map_App/",
   "dependencies": {
     "google-map-react": "^1.0.5",
     "google-maps-react": "^2.0.2",

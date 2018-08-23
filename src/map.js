@@ -115,7 +115,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
           });
     }
     infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
-      <h3> WIKI!</h3> <div class="wiki"></div></div>`);
+      <h3 class="title wikiTitle"> WIKI!</h3> <div class="wiki"></div></div>`);
     geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
     service.getDetails({
@@ -131,7 +131,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
 		          }
 		        
 		  	infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div>${infoContent}<p class="title">Location</p>${marker.position}</div>
-        <h3 class="title"> WIKI!</h3> <div class="wiki"></div></div>`);          
+        <h3 class="title wikiTitle"> WIKI!</h3> <div class="wiki"></div></div>`);          
         }});
         }})
        
@@ -284,6 +284,7 @@ return (
       </ul>
     </output>
   </form>
+  <div class="wiki"></div>
 </div>
 <div id="map" ref="map" role="application" tabIndex="0"></div>
 </div>
