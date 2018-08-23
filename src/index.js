@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+//import registerServiceWorker from './registerServiceWorker';
 import ErrorBoundary from './catch.js'
 
 
@@ -16,7 +16,6 @@ ReactDOM.render(
   alert('not loaded index')
 }
 });
-registerServiceWorker();
 
 window.gm_authFailure = function (){
 
