@@ -20,7 +20,7 @@ ReactDOM.render(
 window.gm_authFailure = function (){
 
      alert('Error In Map Load')
-     document.querySelector('.gm-err-container').innerHTML = `<h1>Error with authentication</h1>
-     <h2> Cannot display map</h2>`
+     /*document.querySelector('.gm-err-container').innerHTML = `<h1>Error with authentication</h1>
+     <h2> Cannot display map</h2>`*/
 
    }
