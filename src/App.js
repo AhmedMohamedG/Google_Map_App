@@ -38,6 +38,7 @@ const LoadingContainer  = (props) => (
 
 
 export default GoogleApiWrapper({
-  apiKey:( 'AIzaSyC0qTi1hkGFXLku0y-CYAhm1y8gpDByKv0'),
-  LoadingContainer : LoadingContainer 
+  apiKey:( 'AIzaSyDS9Vzzpy550PxvIjwFsyVIvISvKnm_eBo'),
+  LoadingContainer : LoadingContainer,
+    libraries: ['places']  
 })(App)

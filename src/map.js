@@ -77,7 +77,7 @@ initMap(){
 
 //Fetching Data from Wikipedia API and populate it into the Infowwindo
 wiki(title, elClass = "wiki"){
-  const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=extracts&rvprop=content&format=json&formatversion=2&origin=*`;
+  const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=extracts&explaintext=1&exintro&exlimit=2&format=json&formatversion=2&origin=*`;
   fetch(url)
     .then(data =>   data.json())
     .then(function (data){
@@ -86,6 +86,8 @@ wiki(title, elClass = "wiki"){
       [].forEach.call(wikiNodes, function(wikiNode) {
         wikiNode.innerHTML = data.query.pages[0].extract
       });
+   //   alert(data.query.pages[0].extract)
+      console.log(data)
       return true
     })
     .catch(function(err){
@@ -116,7 +118,7 @@ populateInfoWindow(marker, infowindow, map,service,google){
     }
     infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div><h3>Location</h3>${marker.position}</div>
       <h3 class="title wikiTitle"> WIKI!</h3> <div class="wiki"></div></div>`);
-    geocoder.geocode({'location': marker.position}, function(results, status)	 {
+    /*geocoder.geocode({'location': marker.position}, function(results, status)	 {
     if(results){
     service.getDetails({
         placeId: results[0].place_id
@@ -133,15 +135,18 @@ populateInfoWindow(marker, infowindow, map,service,google){
 		  	infowindow.setContent(`<div id='infoWrapper' tabIndex="0"><div class="marker_taitle title"><h2>${marker.title}</h2></div><div>${infoContent}<p class="title">Location</p>${marker.position}</div>
         <h3 class="title wikiTitle"> WIKI!</h3> <div class="wiki"></div></div>`);          
         }});
-        }})
+        }})*/
        
     infowindow.open(map, marker);
   const wiki = this.wiki.bind(this)
   const isWiki = wiki(marker.wikiTitle);
-
+/*
   if(!(isWiki)){
+	  infowindow.setContent(`<div class="wiki"><p>Error on loading Wiki<p/></div>`)
+	  
 document.getElementById('infoWrapper').innerHTML += " Error on loading Wiki"
-  }
+
+  }*/
 
   }
 
