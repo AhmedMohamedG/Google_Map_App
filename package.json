@@ -4,13 +4,13 @@
   "private": true,
   "homepage": "https://ahmedmohamedg.github.io/Google_Map_App/",
   "dependencies": {
-    "gh-pages": "^2.0.1",
-    "google-map-react": "^1.0.5",
-    "google-maps-react": "^2.0.2",
-    "kleur": "^3.0.1",
-    "react": "^16.4.1",
+    "gh-pages": "^2.2.0",
+    "google-map-react": "^1.1.7",
+    "google-maps-react": "^2.0.6",
+    "kleur": "^3.0.3",
+    "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^3.4.3"
   },
   "scripts": {
     "predeploy": "npm run build",
